@@ -32,26 +32,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void delete (View v){
+        // DELETE FROM cust WHERE id = 3 and cname = 'brad';
+
         db.delete("cust","id =  ?  and cname = ?", new String[]{"3","KAO"});
         query(null);
     }
-    public void updata (View v){
+    public void update (View v){
+        // UPDATE cust SET cname='Kevin', tel='2222' WHERE id=5;
+
         ContentValues data =  new ContentValues();
             data. put("cname","TONY");
             data.put("tel", "2222111");
+        db.update("cust",data,"id = ?",new String[]{"5"});
         query(null);
 
     }
     public void query (View v){
+        // SELECT * FROM cust
         mesg.setText("");
+        // SELECT * FROM cust
+//        Cursor c = db.query("cust",null,null,null,null,null,null);
 
-       Cursor c =  db.query("cust",null,null,null,null,null,null);
+        // SELECT * FROM cust ORDER BY cname
+        //Cursor c = db.query("cust",null,null,null,null,null,"cname,tel");
+
+        // SELECT * FROM cust WHERE birthday > '1999-02-01' ORDER BY cname
+//        Cursor c = db.query("cust",null,"birthday > ?",new String[]{"1999-02-01"},
+//                null,null,"cname,tel");
+
+        // SELECT cname, tel, birthday FROM cust WHERE birthday > '1999-02-01' ORDER BY cname
+        Cursor c = db.query("cust",new String[]{"cname","tel","birthday"},
+                "birthday > ?",new String[]{"1999-02-01"},
+                null,null,"cname,tel");
+
         while (c.moveToNext()){
-            String id = c.getString(c.getColumnIndex("id"));
+//            String id = c.getString(c.getColumnIndex("id"));
             String cname = c.getString(c.getColumnIndex("cname"));
             String tel = c.getString(c.getColumnIndex("tel"));
             String birthday = c.getString(c.getColumnIndex("birthday"));
-            mesg.append(id+":"+cname+":"+tel+":"+birthday+"\n");
+//            mesg.append(id+":"+cname+":"+tel+":"+birthday+"\n");
+            mesg.append(cname+":"+tel+":"+birthday+"\n");
         }
     }
 }
